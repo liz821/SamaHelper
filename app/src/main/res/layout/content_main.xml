@@ -48,35 +48,35 @@
         android:text="确定" />
     <EditText
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="180dp"
+        android:layout_marginLeft="135dp"
         android:layout_width="70dp"
-        android:hint="ed1"
+        android:hint="妖怪名"
         android:id="@+id/ed1"
-        android:layout_height="22dp" />
+        android:layout_height="45dp" />
 
     <EditText
-        android:layout_width="130dp"
-        android:layout_height="22dp"
-        android:hint="ed2"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:hint="妖怪描述"
         android:id="@+id/ed2"
-        android:layout_marginLeft="260dp"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="15dp" />
 
     <EditText
         android:id="@+id/ed3"
-        android:layout_width="70dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="180dp"
+        android:layout_width="82dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="135dp"
         android:layout_marginTop="55dp"
-        android:hint="ed3" />
+        android:hint="出现位置" />
 
     <EditText
         android:id="@+id/ed4"
-        android:layout_width="130dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="260dp"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="55dp"
-        android:hint="ed4" />
+        android:hint="数量描述" />
     <TextView
         android:layout_width="400dp"
         android:layout_marginTop="180dp"

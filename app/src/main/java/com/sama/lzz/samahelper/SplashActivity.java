@@ -18,5 +18,6 @@ public class SplashActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.splash_activity);
         goToActivityDelay(MainActivity.class,2000);
+        finish();
     }
 }
