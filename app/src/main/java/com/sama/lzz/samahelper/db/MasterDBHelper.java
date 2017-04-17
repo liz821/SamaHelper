@@ -23,6 +23,7 @@ public class MasterDBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         this.db=db;
 //        db.execSQL("create table "+"master(name varchar(30) primary key,description text)");
+     //若有同名表不会重复创建
         db.execSQL("create table "+"master(name varchar(30) primary key,description text,location varchar(18)  ,amount varchar(26))");
 
     }
@@ -44,11 +45,21 @@ public class MasterDBHelper extends SQLiteOpenHelper{
 
 
     public Cursor query() {
-        //获得SQLiteDatabase实例
-        SQLiteDatabase db = getWritableDatabase();
+        if (db == null) {
+            //获得SQLiteDatabase实例
+            db = getWritableDatabase();
+        }
         //查询获得Cursor
-        Cursor c = db.query("mater", null, null, null, null, null, null);
+        Cursor c = db.query("master", null, null, null, null, null, null);
         return c;
+    }
+
+    public void delete(int id) {//删除对应行
+        if (db == null) {
+            db = getWritableDatabase();
+        }
+        //执行删除
+        db.delete("master", "_id=?", new String[]{String.valueOf(id)});
     }
     public SQLiteDatabase getDB(){
         return db;
