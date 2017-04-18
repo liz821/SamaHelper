@@ -20,8 +20,8 @@ SQLiteDatabase db;
 	public void onCreate() {
 		super.onCreate();
 		// 捕捉全局异常
-		CrashHandler crashHandler = CrashHandler.getInstance();
-		crashHandler.init(getApplicationContext());
+//		CrashHandler crashHandler = CrashHandler.getInstance();
+//		crashHandler.init(getApplicationContext());
 
 		//数据库初始化
 		initDatabase();

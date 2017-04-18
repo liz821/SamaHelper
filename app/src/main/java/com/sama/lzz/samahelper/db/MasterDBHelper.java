@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by lzz on 2017/3/23.
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class MasterDBHelper extends SQLiteOpenHelper{
+    String TAG=getClass().getName();
    static String DBName="master_db.db";
    private SQLiteDatabase db;
     public MasterDBHelper(Context context) {
@@ -25,7 +27,7 @@ public class MasterDBHelper extends SQLiteOpenHelper{
 //        db.execSQL("create table "+"master(name varchar(30) primary key,description text)");
      //若有同名表不会重复创建
         db.execSQL("create table "+"master(name varchar(30) primary key,description text,location varchar(18)  ,amount varchar(26))");
-
+        Log.d(TAG, "onCreate: ````````````DB```````````");
     }
 
     @Override
@@ -33,14 +35,16 @@ public class MasterDBHelper extends SQLiteOpenHelper{
 
     }
    public void insert(String name,String description,String location,String amount){
-
+       if (db == null) {
+           //获得SQLiteDatabase实例
+           db = getWritableDatabase();
+       }
         ContentValues values=new ContentValues();
         values.put("name",name);
         values.put("description",description);
         values.put("location",location);
         values.put("amount",amount);
-        db.insert("content",null, values);
-        db.close();
+        db.insert("master",null, values);
     }
 
 

@@ -11,47 +11,70 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.sama.lzz.samahelper.db.MasterDBHelper;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-//TODO 混淆
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        init();
-    }
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     Toolbar toolbar;
     FloatingActionButton fab;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
-    EditText ed1,ed2,ed3,ed4;
-    String name,description,amount,location;
+    EditText ed1, ed2, ed3, ed4;
+    String name, description, amount, location;
     MasterDBHelper dbHelper;
-    void  findView(){
-        //ToolBar
+    Button confirm, insert, delete, quirey, alter;
+    String CTAPE;
+
+    //TODO 混淆
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        findView();
+        init();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+
+    }
+
+    void findView() {
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        //抽屉
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //抽屉导航
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         ed1 = (EditText) findViewById(R.id.ed1);
         ed2 = (EditText) findViewById(R.id.ed2);
         ed3 = (EditText) findViewById(R.id.ed3);
         ed4 = (EditText) findViewById(R.id.ed4);
-
+        confirm = (Button) findViewById(R.id.confirm);
+        insert = (Button) findViewById(R.id.insert);
+        delete = (Button) findViewById(R.id.delete);
+        quirey = (Button) findViewById(R.id.quirey);
+        alter = (Button) findViewById(R.id.alter);
 
     }
-    void init() {
 
+    void init() {
+        confirm.setOnClickListener(this);
+        insert.setOnClickListener(this);
+        delete.setOnClickListener(this);
+        quirey.setOnClickListener(this);
+        alter.setOnClickListener(this);
+        //dbHelper
+        dbHelper = new MasterDBHelper(this);
+        dbHelper.getWritableDatabase();
+        //ToolBar
         setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,8 +84,10 @@ public class MainActivity extends AppCompatActivity
         });
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //抽屉
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        //抽屉导航
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -117,46 +142,120 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-        Snackbar.make(getCurrentFocus(), ""+id, Snackbar.LENGTH_LONG)
+        Snackbar.make(getCurrentFocus(), "" + id, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    void insert() {
+
+    void getText() {
         name = ed1.getText().toString();
         description = ed2.getText().toString();
         location = ed3.getText().toString();
         amount = ed4.getText().toString();
-        dbHelper = new MasterDBHelper(this);
-        dbHelper.insert(name,description,location,amount);
+    }
+
+    void insert() {
+        getText();
+        dbHelper.insert(name, description, location, amount);
     }
 
     String[] quirey(String Qname) {
-        Boolean QTAG=false; //  是否查询到数据
+        Boolean QTAG = false; //  是否查询到数据
         Cursor cursor = dbHelper.query();
         while (cursor.moveToNext()) {   //  指向第一条表中数据,逐行向下
             name = cursor.getString(cursor.getColumnIndex("name"));//该行name列
-            if (Qname.equals(name)){
+            if (Qname.equals(name)) {
                 description = cursor.getString(cursor.getColumnIndex("description"));
                 location = cursor.getString(cursor.getColumnIndex("location"));
                 amount = cursor.getString(cursor.getColumnIndex("amount"));
-                QTAG=true;
+                QTAG = true;
             }
 
         }
-        if (QTAG){
-            return new String[]{description,location,amount};
-        }else  return  null;
+        Log.d("MainActivity", "quirey: " + description+location+location);
+        if (QTAG) {
+            return new String[]{description, location, amount};
+        } else return null;
     }
 
-    void delete(String name,String location) {
+    void delete(String name, String location) {
         SQLiteDatabase db = dbHelper.getDB();
-        db.execSQL("DELETE FROM master WHERE name ="+name+"\tand\t"+"location ="+location);
+        db.execSQL("DELETE FROM master WHERE name =" + name + "\tand\t" + "location =" + location);
     }
 
-    void alter(String name,String location,String amount) {
+    void alter(String name, String location, String amount) {
         SQLiteDatabase db = dbHelper.getDB();
-        db.execSQL("UPDATE master SET amount ="+amount+" WHERE name="+name+"\tand\t"+"location ="+location);
+        db.execSQL("UPDATE master SET amount =" + amount + " WHERE name=" + name + "\tand\t" + "location =" + location);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.insert:
+                ed1.setVisibility(View.VISIBLE);
+                ed3.setVisibility(View.VISIBLE);
+                ed2.setVisibility(View.VISIBLE);
+                ed4.setVisibility(View.VISIBLE);
+                CTAPE = "insert";
+                Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
+                break;
+            case R.id.delete:
+                ed1.setVisibility(View.VISIBLE);
+                ed3.setVisibility(View.VISIBLE);
+                ed2.setVisibility(View.GONE);
+                ed4.setVisibility(View.GONE);
+                CTAPE = "delete";
+                Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
+                break;
+            case R.id.quirey:
+                ed1.setVisibility(View.VISIBLE);
+                ed3.setVisibility(View.GONE);
+                ed2.setVisibility(View.GONE);
+                ed4.setVisibility(View.GONE);
+                CTAPE = "quirey";
+                Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
+                break;
+            case R.id.alter:
+                ed1.setVisibility(View.VISIBLE);
+                ed3.setVisibility(View.GONE);
+                ed2.setVisibility(View.VISIBLE);
+                ed4.setVisibility(View.VISIBLE);
+                CTAPE = "alter";
+                Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
+                break;
+            case R.id.confirm:
+                switch (CTAPE) {
+                    case "insert":
+                        insert();
+                        break;
+                    case "delete":
+
+                        break;
+                    case "quirey":
+                        quirey(ed1.getText().toString());
+                        break;
+                    case "alter":
+                        break;
+                }
+                Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
+                break;
+        }
     }
 }
