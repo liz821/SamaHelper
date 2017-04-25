@@ -1,6 +1,7 @@
 package com.sama.lzz.samahelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
@@ -14,10 +15,10 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.splash_activity);
         goToActivityDelay(MainActivity.class,2000);
-        finish();
+
     }
 }

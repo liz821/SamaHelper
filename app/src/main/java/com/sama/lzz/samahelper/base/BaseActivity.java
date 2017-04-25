@@ -51,7 +51,7 @@ public class BaseActivity extends Activity {
 			public void run() {
                 Intent intent = new Intent(getApplicationContext(),activity);
 				startActivity(intent);
-
+				finish();
 			}
 		};time.schedule(tk, delay);
 		return  true;

@@ -26,7 +26,9 @@ public class MasterDBHelper extends SQLiteOpenHelper{
         this.db=db;
 //        db.execSQL("create table "+"master(name varchar(30) primary key,description text)");
      //若有同名表不会重复创建
-        db.execSQL("create table "+"master(name varchar(30) primary key,description text,location varchar(18)  ,amount varchar(26))");
+        db.execSQL("create table "+"master(name varchar(30) primary key,description text)");
+//        db.execSQL("create table "+"appear(location varchar(18) primary key,amount varchar(26),name varchar(30), FOREIGN KEY REFERENCES master(name))");
+        db.execSQL("create table "+"appear(location varchar(18) primary key,amount varchar(26),name varchar(30), FOREIGN KEY(name) REFERENCES master(name))");
         Log.d(TAG, "onCreate: ````````````DB```````````");
     }
 

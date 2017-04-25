@@ -11,12 +11,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.sama.lzz.samahelper.db.MasterDBHelper;
 
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     String name, description, amount, location;
     MasterDBHelper dbHelper;
     Button confirm, insert, delete, quirey, alter;
+    TextView result;
     String CTAPE;
 
     //TODO 混淆
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         delete = (Button) findViewById(R.id.delete);
         quirey = (Button) findViewById(R.id.quirey);
         alter = (Button) findViewById(R.id.alter);
+        result = (TextView) findViewById(R.id.result);
 
     }
 
@@ -209,10 +216,35 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.insert:
-                ed1.setVisibility(View.VISIBLE);
-                ed3.setVisibility(View.VISIBLE);
-                ed2.setVisibility(View.VISIBLE);
-                ed4.setVisibility(View.VISIBLE);
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+             popupMenu.getMenu().add("添加怪物信息");
+              popupMenu.getMenu().add("添加位置信息");
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getTitle().toString()){
+                            case "添加怪物信息":
+                                ed1.setVisibility(View.VISIBLE);
+                                ed2.setVisibility(View.VISIBLE);
+                                ed3.setVisibility(View.GONE);
+                                ed4.setVisibility(View.GONE);
+                                Snackbar.make(getCurrentFocus(), "添加怪物信息", 1500).setAction("Action", null).show();
+                                break;
+                            case "添加位置信息":
+                                ed1.setVisibility(View.GONE);
+                                ed2.setVisibility(View.GONE);
+                                ed3.setVisibility(View.VISIBLE);
+                                ed4.setVisibility(View.VISIBLE);
+                                Snackbar.make(getCurrentFocus(),"添加位置信息", 1500).setAction("Action", null).show();
+
+                                break;
+                        }
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
+
                 CTAPE = "insert";
                 Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
                 break;
@@ -254,8 +286,14 @@ public class MainActivity extends AppCompatActivity
                     case "alter":
                         break;
                 }
+                showResult();
                 Snackbar.make(v, String.valueOf(v.getId()), 1500).setAction("Action", null).show();
                 break;
         }
+    }
+    void showResult(){
+        String[] Qresult;
+        Qresult=quirey(ed1.getText().toString());
+        result.setText("妖怪名\t"+Qresult[0]+"\n妖怪位置\t"+Qresult[1]+"\n妖怪数量\t"+Qresult[2]);
     }
 }
